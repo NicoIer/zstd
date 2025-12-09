@@ -54,8 +54,8 @@ jobs:
     - name: Collect Android artifacts
       run: |
         mkdir -p android-artifacts
-        find build-android -name "libzstd*.so*" -exec cp {} android-artifacts/ \;
-        find build-android -name "libzstd*.a" -exec cp {} android-artifacts/ \;
+        find build-android -name "libzstd.so*" -exec cp {} android-artifacts/ \;
+        find build-android -name "libzstd.a" -exec cp {} android-artifacts/ \;
         ls -lh android-artifacts/
 
     - name: Upload Android shared libraries

@@ -42,7 +42,7 @@ jobs:
       - name: Collect macOS artifacts
         run: |
           mkdir -p macos-artifacts
-          cp lib/libzstd*.dylib macos-artifacts/ || true
+          find lib \( -name "libzstd.dylib" -o -name "libzstd.*.dylib" \) -exec cp {} macos-artifacts/ \; || true
           cp lib/libzstd.a macos-artifacts/ || true
           ls -lh macos-artifacts/
 
@@ -93,8 +93,8 @@ jobs:
       - name: Collect iOS artifacts
         run: |
           mkdir -p ios-artifacts
-          find build-ios-${{ matrix.arch }} -name "libzstd*.dylib" -exec cp {} ios-artifacts/ \;
-          find build-ios-${{ matrix.arch }} -name "libzstd*.a" -exec cp {} ios-artifacts/ \;
+          find build-ios-${{ matrix.arch }} \( -name "libzstd.dylib" -o -name "libzstd.*.dylib" \) -exec cp {} ios-artifacts/ \;
+          find build-ios-${{ matrix.arch }} -name "libzstd.a" -exec cp {} ios-artifacts/ \;
           ls -lh ios-artifacts/
 
       - name: Upload iOS libraries
@@ -126,14 +126,14 @@ jobs:
 
       - name: Verify Universal binary
         run: |
-          find build-universal -name "libzstd*.dylib" -exec lipo -info {} \;
-          find build-universal -name "libzstd*.a" -exec lipo -info {} \;
+          find build-universal \( -name "libzstd.dylib" -o -name "libzstd.*.dylib" \) -exec lipo -info {} \;
+          find build-universal -name "libzstd.a" -exec lipo -info {} \;
 
       - name: Collect Universal artifacts
         run: |
           mkdir -p universal-artifacts
-          find build-universal -name "libzstd*.dylib" -exec cp {} universal-artifacts/ \;
-          find build-universal -name "libzstd*.a" -exec cp {} universal-artifacts/ \;
+          find build-universal \( -name "libzstd.dylib" -o -name "libzstd.*.dylib" \) -exec cp {} universal-artifacts/ \;
+          find build-universal -name "libzstd.a" -exec cp {} universal-artifacts/ \;
           ls -lh universal-artifacts/
 
       - name: Upload Universal macOS libraries
@@ -149,5 +149,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd universal-artifacts
-          tar -czf zstd-${{ github.ref_name }}-macos-universal.tar.gz libzstd*
+          tar -czf zstd-${{ github.ref_name }}-macos-universal.tar.gz libzstd.* libzstd.a
           gh release upload "${{ github.ref_name }}" zstd-${{ github.ref_name }}-macos-universal.tar.gz --clobber

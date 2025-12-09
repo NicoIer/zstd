@@ -125,8 +125,8 @@ build_android() {
     cmake --build . --parallel
     
     # Copy artifacts
-    find . -name "libzstd*.so*" -exec cp {} "${OUTPUT_DIR}/android/" \;
-    find . -name "libzstd*.a" -exec cp {} "${OUTPUT_DIR}/android/" \;
+    find . -name "libzstd.so*" -exec cp {} "${OUTPUT_DIR}/android/" \;
+    find . -name "libzstd.a" -exec cp {} "${OUTPUT_DIR}/android/" \;
     
     echo "Android build complete. Output in ${OUTPUT_DIR}/android/"
 }
@@ -160,8 +160,8 @@ build_ios() {
     cmake --build . --parallel
     
     # Copy artifacts
-    find . -name "libzstd*.dylib" -exec cp {} "${OUTPUT_DIR}/ios/" \;
-    find . -name "libzstd*.a" -exec cp {} "${OUTPUT_DIR}/ios/" \;
+    find . -name "libzstd.dylib" -o -name "libzstd.*.dylib" -exec cp {} "${OUTPUT_DIR}/ios/" \;
+    find . -name "libzstd.a" -exec cp {} "${OUTPUT_DIR}/ios/" \;
     
     echo "iOS build complete. Output in ${OUTPUT_DIR}/ios/"
 }
