@@ -132,9 +132,8 @@ export ANDROID_NDK_HOME=/path/to/android-ndk
 ```
 
 **Supported Architectures:**
-- `arm64` (iPhone 5s and later)
+- `arm64` (iPhone 5s and later, also iOS Simulator on Apple Silicon Macs)
 - `x86_64` (iOS Simulator on Intel Macs)
-- `arm64` (iOS Simulator on Apple Silicon Macs)
 
 **Output:**
 - `libzstd.dylib` - Dynamic library

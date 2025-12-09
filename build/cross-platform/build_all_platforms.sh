@@ -211,4 +211,4 @@ main() {
     echo "Build complete!"
 }
 
-main
+main "$@"
