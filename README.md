@@ -179,6 +179,27 @@ example about how Meson is used to build this project.
 
 Note that default build type is **release**.
 
+### Cross-Platform Shared Libraries
+
+zstd supports building shared libraries for multiple platforms including Android, iOS, macOS, Windows, and Linux.
+
+For detailed cross-platform build instructions, see [`build/cross-platform/README.md`](build/cross-platform/README.md).
+
+**Quick start:**
+```bash
+# Build for all platforms (requires appropriate toolchains)
+./build/cross-platform/build_all_platforms.sh all
+
+# Build for specific platform
+./build/cross-platform/build_all_platforms.sh linux    # .so files
+./build/cross-platform/build_all_platforms.sh macos    # .dylib files
+./build/cross-platform/build_all_platforms.sh windows  # .dll files
+./build/cross-platform/build_all_platforms.sh android  # .so files for Android
+./build/cross-platform/build_all_platforms.sh ios      # .dylib files for iOS
+```
+
+GitHub Actions workflows automatically build and upload shared libraries for all platforms on releases.
+
 ### VCPKG
 You can build and install zstd [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
 
