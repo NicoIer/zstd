@@ -314,6 +314,49 @@ ZSTDLIB_API size_t ZSTD_decompressDCtx(ZSTD_DCtx* dctx,
                                  const void* src, size_t srcSize);
 
 
+/***************************************
+*  Diff API
+***************************************/
+/*! ZSTD_createDiff() :
+ *  Create a compressed diff (delta) between source and target buffers.
+ *  The diff can later be applied to source to reconstruct target.
+ *  @param dst : buffer to store the compressed diff
+ *  @param dstCapacity : size of dst buffer
+ *  @param target : target buffer (what we want to get)
+ *  @param targetSize : size of target buffer
+ *  @param source : source buffer (what we start with)
+ *  @param sourceSize : size of source buffer
+ *  @param compressionLevel : compression level for the diff data (1-22)
+ *  @return : size of compressed diff, or an error code (use ZSTD_isError())
+ */
+ZSTDLIB_API size_t ZSTD_createDiff(void* dst, size_t dstCapacity,
+                                   const void* target, size_t targetSize,
+                                   const void* source, size_t sourceSize,
+                                   int compressionLevel);
+
+/*! ZSTD_applyDiff() :
+ *  Apply a compressed diff to source buffer to reconstruct target.
+ *  @param dst : buffer to store the reconstructed target
+ *  @param dstCapacity : size of dst buffer
+ *  @param diff : the compressed diff data
+ *  @param diffSize : size of diff data
+ *  @param source : source buffer (same as used in ZSTD_createDiff)
+ *  @param sourceSize : size of source buffer
+ *  @return : size of reconstructed target, or an error code (use ZSTD_isError())
+ */
+ZSTDLIB_API size_t ZSTD_applyDiff(void* dst, size_t dstCapacity,
+                                  const void* diff, size_t diffSize,
+                                  const void* source, size_t sourceSize);
+
+/*! ZSTD_getDiffBound() :
+ *  Maximum size required for diff buffer in worst case scenario.
+ *  @param targetSize : size of target buffer
+ *  @param sourceSize : size of source buffer
+ *  @return : maximum possible size of diff data
+ */
+ZSTDLIB_API size_t ZSTD_getDiffBound(size_t targetSize, size_t sourceSize);
+
+
 /*********************************************
 *  Advanced compression API (Requires v1.4.0+)
 **********************************************/

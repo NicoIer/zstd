@@ -82,7 +82,7 @@ ZSTDRTTEST = --test-large-data
 DECODECORPUS_TESTTIME ?= -T30
 
 .PHONY: all
-all: fullbench fuzzer zstreamtest paramgrill datagen decodecorpus roundTripCrash poolTests
+all: fullbench fuzzer zstreamtest paramgrill datagen decodecorpus roundTripCrash poolTests difftest
 
 .PHONY: all32
 all32: fullbench32 fuzzer32 zstreamtest32
@@ -243,6 +243,10 @@ decodecorpus : $(filter-out zstdc_zstd_compress.o, $(ZSTD_OBJECTS)) $(ZDICT_FILE
 CLEAN += poolTests
 poolTests : $(PRGDIR)/util.c $(PRGDIR)/timefn.c poolTests.c $(LIB_SRCDIR)/common/pool.c $(LIB_SRCDIR)/common/threading.c $(LIB_SRCDIR)/common/zstd_common.c $(LIB_SRCDIR)/common/error_private.c
 	$(LINK.c) $(MULTITHREAD) $^ -o $@$(EXT)
+
+CLEAN += difftest
+difftest : difftest.c $(LIB_BINDIR)/libzstd.a
+	$(CC) $(FLAGS) $(CPPFLAGS) $< $(LIB_BINDIR)/libzstd.a -o $@$(EXT)
 
 .PHONY: versionsTest
 versionsTest: clean
@@ -446,6 +450,9 @@ test-decodecorpus-cli: decodecorpus
 
 test-pool: poolTests
 	$(QEMU_SYS) ./poolTests
+
+test-diff: difftest
+	$(QEMU_SYS) ./difftest
 
 test-lz4: ZSTD = $(PRGDIR)/zstd
 test-lz4: ZSTD_LZ4 = ./lz4

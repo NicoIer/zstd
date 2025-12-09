@@ -21,7 +21,8 @@ all: simple_compression simple_decompression \
 	multiple_simple_compression\
 	dictionary_compression dictionary_decompression \
 	streaming_compression streaming_decompression \
-	multiple_streaming_compression streaming_memory_usage
+	multiple_streaming_compression streaming_memory_usage \
+	diff_usage
 
 $(LIB) :
 	$(MAKE) -C $(LIBDIR) libzstd.a
@@ -53,15 +54,19 @@ streaming_decompression : $(LIB)
 streaming_memory_usage.o: common.h
 streaming_memory_usage : $(LIB)
 
+diff_usage.o: common.h
+diff_usage : $(LIB)
+
 
 .PHONY:clean
 clean:
-	@$(RM) core *.o tmp* result* *.zst \
+	@$(RM) core *.o tmp* result* *.zst *.diff \
         simple_compression simple_decompression \
         multiple_simple_compression \
         dictionary_compression dictionary_decompression \
         streaming_compression streaming_decompression \
-        multiple_streaming_compression streaming_memory_usage
+        multiple_streaming_compression streaming_memory_usage \
+        diff_usage
 	@echo Cleaning completed
 
 .PHONY:test
@@ -89,5 +94,7 @@ test: all
 	@echo -- Dictionary compression tests
 	./dictionary_compression tmp2 tmp README.md
 	./dictionary_decompression tmp2.zst tmp.zst README.md
-	$(RM) tmp* *.zst
+	@echo -- Diff compression tests
+	./diff_usage tmp tmp2 result.diff
+	$(RM) tmp* result* *.zst *.diff
 	@echo tests completed

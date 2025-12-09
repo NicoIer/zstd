@@ -285,10 +285,15 @@ $(RES32_FILE): windres/zstd.rc
 	$(RC) -o $@ -I ../lib -I windres -i $< -O coff -F pe-i386
 endif
 
+# zstd-diff: standalone diff/patch utility
+.PHONY: zstd-diff
+zstd-diff: $(ZSTDLIB_CORE_SRC) zstd-diff.c util.c timefn.c
+	$(CC) $(FLAGS) $(CPPFLAGS) -DZSTD_LEGACY_SUPPORT=0 $^ -o $@$(EXT)
+
 .PHONY: clean
 clean:
-	$(RM) $(CLEAN) core *.o tmp* result* dictionary *.zst \
-        *.gcda default*.profraw default.profdata have_zlib
+	$(RM) $(CLEAN) core *.o tmp* result* dictionary *.zst *.diff \
+        zstd-diff$(EXT) *.gcda default*.profraw default.profdata have_zlib
 	$(RM) -r obj/*
 	@echo Cleaning completed
 
