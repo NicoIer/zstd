@@ -71,7 +71,7 @@ Apply a compressed diff to source to reconstruct target.
 #include <zstd.h>
 
 // Create a diff
-size_t sourceSizesize_t targetSize;
+size_t sourceSize, targetSize;
 void* source = loadFile("old.bin", &sourceSize);
 void* target = loadFile("new.bin", &targetSize);
 

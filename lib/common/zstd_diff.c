@@ -15,10 +15,9 @@
 #include "mem.h"
 
 /* Diff format:
- * [Header: 16 bytes]
- *   - Magic: 4 bytes (0x5A535444 = "ZSTD" in hex, but 0x44494646 = "DIFF")
+ * [Header: 12 bytes]
+ *   - Magic: 4 bytes (0x44494646 = "DIFF")
  *   - Target size: 8 bytes (little endian)
- *   - Source size: 8 bytes (little endian, removed - not needed)
  * [Compressed data]
  *   - Copy operations and new data compressed with zstd
  *

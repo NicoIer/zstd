@@ -232,9 +232,13 @@ static int applyDiff(const char* sourcePath, const char* diffPath,
     }
     
     /* Apply diff - need to determine output size first */
-    /* For now, use a reasonable buffer size */
+    /* For now, use a heuristic buffer size. In a future enhancement,
+     * the target size could be read from the diff header. */
     {
-        size_t const maxOutputSize = sourceSize * 10 + 1024*1024;  /* heuristic */
+        /* Heuristic: assume target is no more than 10x source size + 1MB overhead */
+        const size_t SIZE_MULTIPLIER = 10;
+        const size_t SIZE_OVERHEAD = 1024*1024;
+        size_t const maxOutputSize = sourceSize * SIZE_MULTIPLIER + SIZE_OVERHEAD;
         outputBuff = malloc(maxOutputSize);
         if (!outputBuff) {
             fprintf(stderr, "Error: not enough memory for output buffer\n");
@@ -309,11 +313,13 @@ int main(int argc, char** argv)
         
         /* Parse optional compression level */
         if (argc >= 7 && strcmp(argv[5], "-l") == 0) {
-            compressionLevel = atoi(argv[6]);
-            if (compressionLevel < 1 || compressionLevel > 22) {
+            char* endptr;
+            long level = strtol(argv[6], &endptr, 10);
+            if (*endptr != '\0' || level < 1 || level > 22) {
                 fprintf(stderr, "Error: compression level must be between 1 and 22\n");
                 return 1;
             }
+            compressionLevel = (int)level;
         }
         
         return createDiff(argv[2], argv[3], argv[4], compressionLevel);
