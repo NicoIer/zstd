@@ -44,3 +44,8 @@ Zstandard library : usage examples
   Decompress multiple files using the same dictionary.
   Result remains in memory.
   Introduces usage of : `ZSTD_createDDict()` and `ZSTD_decompress_usingDDict()`
+
+- [Diff usage](diff_usage.c) :
+  Create and apply compressed binary diffs between files.
+  Demonstrates the diff/patch functionality for efficient file updates.
+  Introduces usage of : `ZSTD_createDiff()`, `ZSTD_applyDiff()`, and `ZSTD_getDiffBound()`
